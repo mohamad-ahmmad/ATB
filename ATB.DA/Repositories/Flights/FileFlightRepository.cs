@@ -1,4 +1,5 @@
 ﻿using ATB.DA.Enums;
+using ATB.DA.Extensions;
 using ATB.DA.Models;
 using System;
 using System.Collections.Generic;
@@ -26,6 +27,8 @@ namespace ATB.DA.Repositories.Flights
         {
             string[] flightsStoredInFile = File.ReadAllLines(_filePath);
             List<FlightModel> flights = new();
+
+            //Return empty list.
             if (flightsStoredInFile.Length <=1)
                 return flights;
 
@@ -33,15 +36,21 @@ namespace ATB.DA.Repositories.Flights
             while(i < flightsStoredInFile.Length)
             {
                 string flightDetails = flightsStoredInFile[i]+"\r\n";
-                string flightClassesDetails = string.Empty;
 
-                //Accumlate the csv data about the
-                int flightClassesCount = int.Parse(flightDetails.Split(',')[7]);
-                int offset = i;
-                for(i++; i < flightClassesCount+offset+1; i++)
-                    flightClassesDetails += flightsStoredInFile[i] + "\r\n";
+                //Accumlate the csv data about the flight classes to flight[i]
+                int flightClassesCount = int.Parse(flightDetails.Split(',')[7]);//1 - 3
 
-                flights.Add(FlightModel.FromCSV(flightDetails + flightClassesDetails));               
+                // Get all the flight classes related to the flight[i].
+                string flightClassesDetails= flightsStoredInFile
+                                            .SubArray(i+1,flightClassesCount)
+                                            .Aggregate( (new StringBuilder()), 
+                                                    (builder, classLine) => builder.AppendLine(classLine)).ToString();
+
+                Console.WriteLine(flightClassesDetails);
+                flights.Add(FlightModel.FromCSV(flightDetails + flightClassesDetails));
+
+                //jump to the next flight.
+                i += flightClassesCount+1;
             }
 
             return flights;

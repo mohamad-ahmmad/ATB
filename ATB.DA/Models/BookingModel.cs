@@ -7,8 +7,14 @@ using System.Threading.Tasks;
 
 namespace ATB.DA.Models
 {
-    public record BookingModel(ulong UserId, ulong FlightId, FlightClassEnum FlightClass) 
+    public class BookingModel
     {
+        public ulong UserId { get; set; }
+        public ulong FlightId { get; set; }
+        public FlightClassEnum FlightClass { get; set; }
+        public BookingModel(ulong userId, ulong flightId, FlightClassEnum flightClass)
+            => (UserId, FlightId, FlightClass) = (userId, flightId, flightClass);
+
         /// <summary>
         /// Return a object of booking model from the CSV representation.
         /// </summary>

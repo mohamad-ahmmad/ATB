@@ -66,12 +66,13 @@ namespace ATB.DA.Test.FlightsTests
 
             return flights;
         }
-        private void EraseFileContent() => File.WriteAllBytes(_filePath, new byte[] { });
+        private void ClearFileContent() => File.WriteAllBytes(_filePath, new byte[] { });
+
         [TestMethod]
         public void AddFlight_ShouldAppendToCSVFileCorrectly()
         {
             //Erase All Content
-            EraseFileContent();
+            ClearFileContent();
 
             FileFlightRepository repo = new();
 
@@ -97,7 +98,7 @@ namespace ATB.DA.Test.FlightsTests
         public void GetAllFlightsInFlightsFile_ShouldGetListOfFlightModelCorrectly()
         {
             //Erase File Content
-            EraseFileContent();
+            ClearFileContent();
             //arrange
             FileFlightRepository repo = new();
 
@@ -120,7 +121,7 @@ namespace ATB.DA.Test.FlightsTests
         [TestMethod]
         public void Constructor_ShouldReadAllTheDataAndConvertItToListOfFlights()
         {
-            EraseFileContent();
+            ClearFileContent();
 
             var repo = new FileFlightRepository();
             List<FlightModel> list1 = GetMockFlightData();
@@ -135,5 +136,63 @@ namespace ATB.DA.Test.FlightsTests
 
         }
 
+        [TestMethod]
+        public void GetAllFlightUsingFilter_ShouldReturnTheResultSuccessfully()
+        {
+            //Arrange
+            ClearFileContent();
+            var repo = new FileFlightRepository();
+            repo.AddAllFlights(GetMockFlightData());
+
+            //Actual
+            var res = repo.GetAllFlights(new FlightFilter(
+                        500,
+                        "USA",
+                        "UK",
+                        DateTime.ParseExact("31/07/2023 12:30:00", "dd/MM/yyyy HH:mm:ss", null),
+                        "JFK",
+                        "LHR",
+                        FlightClassEnum.Economy
+                        )).FirstOrDefault();
+
+            //Expected
+            var expected = new FlightModelSearchResultModel
+                (
+                        1,
+                        "USA",
+                        "UK",
+                        DateTime.ParseExact("31/07/2023 12:30:00", "dd/MM/yyyy HH:mm:ss", null),
+                        "JFK",
+                        "LHR",
+                        new FlightClassModel(FlightClassEnum.Economy, 500, 200)
+                );
+
+            Assert.AreEqual(expected, res);
+
+        }
+
+        [TestMethod]
+        public void GetAllFlightUsingFilter_ShouldReturnEmptyList()
+        {
+            //Arrange
+            ClearFileContent();
+            var repo = new FileFlightRepository();
+            repo.AddAllFlights(GetMockFlightData());
+
+            //Actual
+            var res = repo.GetAllFlights(new FlightFilter(
+                        null,
+                        "PAL",
+                        null,
+                        null,
+                        null,
+                        null,
+                        null
+                        )).FirstOrDefault();
+
+
+            Assert.IsNull(res);
+
+        }
     }
 }

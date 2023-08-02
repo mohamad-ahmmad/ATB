@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
 namespace ATB.DA.Repositories.Flights
@@ -101,5 +102,51 @@ namespace ATB.DA.Repositories.Flights
         /// </summary>
         /// <returns></returns>
         public List<FlightModel> GetAllFlights()=> _flights;
+
+
+        /// <summary>
+        /// Return a result list of FlightModel the matches with the filter data.
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        public List<FlightModelSearchResultModel> GetAllFlights(FlightFilter filter)
+        {
+           //Filter Function used in where statement.
+            Func<FlightModelSearchResultModel, bool> predicate = (flight) =>
+            {
+                bool depCountryCondition = filter.DepCountry == null || filter.DepCountry == flight.DepCountry;
+                bool arrivalCountryCondition = filter.ArrivalCountry == null || filter.ArrivalCountry == flight.ArrivalCountry;
+                bool depTimeCondition = filter.DepDate == null || filter.DepDate.Equals(flight.DepDate);
+                bool depAirportCondition = filter.DepAirport == null || filter.DepAirport == flight.DepAirport;
+                bool arrivalAirportCondition = filter.ArrivalAirport == null || filter.ArrivalAirport == flight.ArrivalAirport;
+                bool flightClassCondition = filter.FlightClass == null || filter.FlightClass == flight.FlightClassModel.FlightClass;
+                bool priceCondition = filter.Price == null || filter.Price == flight.FlightClassModel.Price;
+
+                return depCountryCondition &&
+                        arrivalCountryCondition &&
+                        depTimeCondition &&
+                        depAirportCondition &&
+                        arrivalAirportCondition &&
+                        flightClassCondition &&
+                        priceCondition;
+
+            };
+
+            //flatten the flights becuase the single flight might have multiple classes.
+            var res = _flights.SelectMany((flight) => flight.FlightClasses,
+                                (flight, flightClass) => new FlightModelSearchResultModel
+                                (
+                                    flight.FlightId,
+                                    flight.DepCountry,
+                                    flight.ArrivalCountry,
+                                    flight.DepDate,
+                                    flight.DepAirport,
+                                    flight.ArrivalAirport,
+                                    flightClass
+                                ));
+            
+            return res.Where(predicate).ToList();
+        }
+
     }
 }

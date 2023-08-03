@@ -11,59 +11,8 @@ namespace ATB.DA.Test.FlightsTests
     [TestClass]
     public class FlightModelTests
     {
-        private List<FlightModel> GetMockFlightData()
-        {
-            List<FlightModel> flights = new List<FlightModel>
-    {
-        new FlightModel(
-            FlightId: 1,
-            DepCountry: "USA",
-            ArrivalCountry: "UK",
-            DepDate: new DateTime(2023, 7, 31, 12, 30, 0),
-            DepAirport: "JFK",
-            ArrivalAirport: "LHR",
-            FlightClasses: new List<FlightClassModel>
-            {
-                new FlightClassModel(FlightClassEnum.Economy, 500, 200),
-                new FlightClassModel(FlightClassEnum.Business, 1500, 50),
-                new FlightClassModel(FlightClassEnum.FirstClass, 3000, 20)
-            },
-            DateFormat: "dd/MM/yyyy HH:mm:ss"
-        ),
-        new FlightModel(
-            FlightId: 2,
-            DepCountry: "UK",
-            ArrivalCountry: "France",
-            DepDate: new DateTime(2023, 8, 15, 8, 0, 0),
-            DepAirport: "LHR",
-            ArrivalAirport: "CDG",
-            FlightClasses: new List<FlightClassModel>
-            {
-                new FlightClassModel(FlightClassEnum.Economy, 400, 250),
-                new FlightClassModel(FlightClassEnum.Business, 1200, 40),
-                new FlightClassModel(FlightClassEnum.FirstClass, 2500, 15)
-            },
-            null
-        ),
-        new FlightModel(
-            FlightId: 3,
-            DepCountry: "Germany",
-            ArrivalCountry: "Spain",
-            DepDate: new DateTime(2023, 9, 20, 15, 45, 0),
-            DepAirport: "FRA",
-            ArrivalAirport: "MAD",
-            FlightClasses: new List<FlightClassModel>
-            {
-                new FlightClassModel(FlightClassEnum.Economy, 350, 300),
-                new FlightClassModel(FlightClassEnum.Business, 1000, 60),
-                new FlightClassModel(FlightClassEnum.FirstClass, 2200, 25)
-            },
-            DateFormat: "dd/MM/yyyy HH:mm:ss"
-        ),
-    };
-
-            return flights;
-        }
+        private List<FlightModel> GetMockFlightData() => FlightMockData.GetFlightsMockData();
+       
         [TestMethod]
         public void ToCSV_ShouldReturnValidCSVString()
         {
@@ -151,7 +100,42 @@ namespace ATB.DA.Test.FlightsTests
 
         }
 
-        
+        [TestMethod]
+        public void FlightModel_ValidData_ShouldBeValid()
+        {
+            // Arrange
+            var flightModel = new FlightModel(1u, "USA", "UK", DateTime.Now.AddDays(2), "JFK","LHR",null!,null);
+
+            // Act
+            var context = new ValidationContext(flightModel, serviceProvider: null, items: null);
+            var validationResults = new List<ValidationResult>();
+            var isValid = Validator.TryValidateObject(flightModel, context, validationResults, true);
+
+            foreach(var validationResult in validationResults)
+                Console.WriteLine(validationResult.ErrorMessage);
+            // Assert
+            Assert.IsTrue(isValid);
+            Assert.AreEqual(0, validationResults.Count);
+        }
+
+        [TestMethod]
+        public void FlightModel_InvalidData_ShouldNotBeValid()
+        {
+            // Arrange
+            var flightModel = new FlightModel(3u, "USA123", "", DateTime.Now.AddDays(6), "JFK$#", "LHR", null!, null);
+
+            // Act
+            var context = new ValidationContext(flightModel);
+            var validationResults = new List<ValidationResult>();
+            var isValid = Validator.TryValidateObject(flightModel, context, validationResults, true);
+
+            foreach(var item in validationResults)
+                Console.WriteLine(item.ErrorMessage);
+            // Assert
+            Assert.IsFalse(isValid);
+            Assert.AreEqual(3, validationResults.Count); // 3 properties are invalid
+        }
+
 
     }
 }

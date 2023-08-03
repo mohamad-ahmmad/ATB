@@ -1,11 +1,7 @@
 ﻿using ATB.DA.Enums;
 using ATB.DA.Models;
 using ATB.DA.Repositories.Flights;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace ATB.DA.Test.FlightsTests
 {
@@ -13,59 +9,7 @@ namespace ATB.DA.Test.FlightsTests
     public class FileFlightsRepositoryTests
     {
         private const string _filePath = @"C:\Users\USER-M\source\repos\ATB\ATB.DA\Data\flights.csv";
-        private List<FlightModel> GetMockFlightData()
-        {
-            List<FlightModel> flights = new List<FlightModel>
-    {
-        new FlightModel(
-            FlightId: 1,
-            DepCountry: "USA",
-            ArrivalCountry: "UK",
-            DepDate: new DateTime(2023, 7, 31, 12, 30, 0),
-            DepAirport: "JFK",
-            ArrivalAirport: "LHR",
-            FlightClasses: new List<FlightClassModel>
-            {
-                new FlightClassModel(FlightClassEnum.Economy, 500, 200),
-                new FlightClassModel(FlightClassEnum.Business, 1500, 50),
-                new FlightClassModel(FlightClassEnum.FirstClass, 3000, 20)
-            },
-            DateFormat: "dd/MM/yyyy HH:mm:ss"
-        ),
-        new FlightModel(
-            FlightId: 2,
-            DepCountry: "UK",
-            ArrivalCountry: "France",
-            DepDate: new DateTime(2023, 8, 15, 8, 0, 0),
-            DepAirport: "LHR",
-            ArrivalAirport: "CDG",
-            FlightClasses: new List<FlightClassModel>
-            {
-                new FlightClassModel(FlightClassEnum.Economy, 400, 250),
-                new FlightClassModel(FlightClassEnum.Business, 1200, 40),
-                new FlightClassModel(FlightClassEnum.FirstClass, 2500, 15)
-            },
-            null
-        ),
-        new FlightModel(
-            FlightId: 3,
-            DepCountry: "Germany",
-            ArrivalCountry: "Spain",
-            DepDate: new DateTime(2023, 9, 20, 15, 45, 0),
-            DepAirport: "FRA",
-            ArrivalAirport: "MAD",
-            FlightClasses: new List<FlightClassModel>
-            {
-                new FlightClassModel(FlightClassEnum.Economy, 350, 300),
-                new FlightClassModel(FlightClassEnum.Business, 1000, 60),
-                new FlightClassModel(FlightClassEnum.FirstClass, 2200, 25)
-            },
-            DateFormat: "dd/MM/yyyy HH:mm:ss"
-        ),
-    };
-
-            return flights;
-        }
+        private List<FlightModel> GetMockFlightData() => FlightMockData.GetFlightsMockData();
         private void ClearFileContent() => File.WriteAllBytes(_filePath, new byte[] { });
 
         [TestMethod]

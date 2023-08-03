@@ -1,30 +1,55 @@
 ﻿using ATB.DA.Enums;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ATB.DA.Models.ValidationAttributes;
+using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.Metrics;
 
 namespace ATB.DA.Models
 {
-    public record FlightModel
-        (
-        ulong FlightId,
-        string DepCountry,
-        string ArrivalCountry,
-        DateTime DepDate,
-        string DepAirport,
-        string ArrivalAirport,
-        List<FlightClassModel> FlightClasses,
-        string? DateFormat
-        )
+    public class FlightModel
     {
+        public ulong FlightId { get; private set; }
 
+        [Required(ErrorMessage = "Departure country is required.")]
+        [RegularExpression("^[A-Za-z ]+$", ErrorMessage = "Departure country must contain only text.")]
+        public string DepCountry { get; set; }
+        
+        [Required(ErrorMessage = "Arrival country is required.")]
+        [RegularExpression("^[A-Za-z ]+$", ErrorMessage = "Arrival country must contain only text.")]
+        public string ArrivalCountry { get; set; }
+
+        [Required(ErrorMessage = "Departure date is required.")]
+        [ValidDate(ErrorMessage = "The departure date is invalid.")]
+        public DateTime DepDate { get; set; }
+
+        [Required(ErrorMessage = "Departure airport is required.")]
+        [RegularExpression("^[A-Za-z ]+$", ErrorMessage = "Departure airport only text allowed.")]
+        
+        public string DepAirport { get; set; }
+
+        [Required(ErrorMessage = "Arrival airport is required.")]
+        [RegularExpression("^[A-Za-z ]+$", ErrorMessage = "Arrival airport only text allowed.")]
+      
+        public string ArrivalAirport { get; set; }
+
+        public List<FlightClassModel> FlightClasses { get; set; }
+
+        public string DateFormat { get ; set; }
         private const string _defaultFormat = "yyyy-MM-dd HH:mm:ss";
-        public string DateFormat { private get ; init; } 
-            = DateFormat ?? _defaultFormat;
 
+
+        public FlightModel
+            (
+            ulong flightId,
+            string depCountry,
+            string arrivalCountry,
+            DateTime depDate,
+            string depAirport,
+            string arrivalAirport,
+            List<FlightClassModel> flightClasses,
+            string? dateFormat
+            )
+        => (FlightId, DepCountry, ArrivalCountry, DepDate, DepAirport, ArrivalAirport, FlightClasses, DateFormat)
+            = (flightId, depCountry, arrivalCountry, depDate, depAirport, arrivalAirport, flightClasses, dateFormat?? _defaultFormat);
         /// <summary>
         /// CSV Representation of FlightModel Object.
         /// </summary>

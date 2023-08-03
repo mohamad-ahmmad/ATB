@@ -23,6 +23,7 @@ namespace ATB.DA.Models
         public static UserModel FromCSV(string CSVData)
         {
             string[] fields = CSVData.Split(",");
+            Console.WriteLine(CSVData);
             return new UserModel(
                 ulong.Parse(fields[0]),
                 fields[1],
@@ -33,7 +34,7 @@ namespace ATB.DA.Models
                 (AccessLevelEnum)int.Parse(fields[6])
                 );
         }
-        public string ToCSV() => $"{UserId},{FName},{MName},{LName},{Email},{Password},{AccessLevel}";
+        public string ToCSV() => $"{UserId},{FName},{MName},{LName},{Email},{Password},{(int)AccessLevel}";
     };
     
     

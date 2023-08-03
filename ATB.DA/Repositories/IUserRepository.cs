@@ -14,6 +14,7 @@ namespace ATB.DA.Repositories
         public OperationStatusEnum AddUser(UserModel user);
         public UserModel? GetUser(ulong userId);
         public List<UserModel> GetAllUsers();
+        public UserModel? GetUser(string email);
 
     }
 }

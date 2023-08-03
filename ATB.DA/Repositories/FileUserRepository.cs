@@ -13,7 +13,6 @@ namespace ATB.DA.Repositories
     {
         const string _filePath = @"C:\Users\USER-M\source\repos\ATB\ATB.DA\Data\users.csv";
         private List<UserModel> _users = null!;
-
         public FileUserRepository() 
         {
             _users = new List<UserModel>();
@@ -50,7 +49,6 @@ namespace ATB.DA.Repositories
         /// <returns></returns
         public OperationStatusEnum AddUser(UserModel user)
         {
-            
             if(AddUserToFile(user.ToCSV()) == OperationStatusEnum.Failed)
                 return OperationStatusEnum.Failed;
             
@@ -77,6 +75,8 @@ namespace ATB.DA.Repositories
             }
         }
 
+
+
         /// <summary>
         /// Return all users in the file
         /// </summary>
@@ -87,10 +87,16 @@ namespace ATB.DA.Repositories
         /// Get a user with the specified id.
         /// </summary>
         /// <param name="userId"></param>
-        /// <returns>UserModel?</returns>
+        /// <returns>UserModel or null</returns>
         public UserModel? GetUser(ulong userId) 
             => _users.Where(user => user.UserId == userId).FirstOrDefault();
 
-           
+        /// <summary>
+        /// Get a user with the specified email.
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns>UserModel or null</returns>
+        public UserModel? GetUser(string email)
+            => _users.Where(user => user.Email == email).FirstOrDefault();
     }
 }

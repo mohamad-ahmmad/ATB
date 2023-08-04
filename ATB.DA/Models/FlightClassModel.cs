@@ -1,4 +1,4 @@
-﻿using ATB.DA.Enums;
+using ATB.DA.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;

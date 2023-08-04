@@ -7,7 +7,8 @@ namespace ATB.DA.Models
 {
     public class FlightModel
     {
-        public ulong FlightId { get; private set; }
+
+        public ulong FlightId { get; set; }
 
         [Required(ErrorMessage = "Departure country is required.")]
         [RegularExpression("^[A-Za-z ]+$", ErrorMessage = "Departure country must contain only text.")]
@@ -34,8 +35,8 @@ namespace ATB.DA.Models
         public List<FlightClassModel> FlightClasses { get; set; }
 
         public string DateFormat { get ; set; }
-        private const string _defaultFormat = "yyyy-MM-dd HH:mm:ss";
 
+        private const string _defaultFormat = "yyyy-MM-dd HH:mm:ss";
 
         public FlightModel
             (
@@ -67,6 +68,12 @@ namespace ATB.DA.Models
            return $"{FlightId},{DepCountry},{ArrivalCountry},{DepDate.ToString(DateFormat)},{DepAirport},{ArrivalAirport},{dateFormat},{flightClassesCSV}";
         }
 
+       
+        /// <summary>
+        /// Gives a unique Id for the flight
+        /// </summary>
+        /// <returns></returns>
+     
 
         /// <summary>
         /// Split the string into two strings flightDetails and flightClasses.
@@ -85,7 +92,7 @@ namespace ATB.DA.Models
         /// </summary>
         /// <param name="flightClasses"></param>
         /// <returns>List<FligtClassModel></returns>
-        private static List<FlightClassModel> flightClassesModels(string flightClasses)
+        private static List<FlightClassModel> FromCSVToFlightClassesModels(string flightClasses)
         {
             List<FlightClassModel> flightsClasses = new();
 
@@ -124,7 +131,7 @@ namespace ATB.DA.Models
             string depAirport = fields[4];
             string arrivalAirport = fields[5];
 
-            List<FlightClassModel> flightsClasses = flightClassesModels(flightClasses);
+            List<FlightClassModel> flightsClasses = FromCSVToFlightClassesModels(flightClasses);
             
             return new FlightModel
                 (

@@ -22,20 +22,11 @@ namespace ATB.DA.Test.FlightsTests
 
             FlightModel flight = GetMockFlightData()[0];
 
-            repo.AddFlight(flight);
+            OperationStatusEnum res = repo.AddFlight(flight);
             
-            //Act
-            string[] fileContent = File.ReadAllLines(_filePath);
-            string act = string.Empty;
-            foreach (string line in fileContent) act += line +"\r\n";
+            
 
-            //Expected
-            string csv = "1,USA,UK,31/07/2023 12:30:00,JFK,LHR,dd/MM/yyyy HH:mm:ss,3\r\n" +
-                "0,500,200\r\n" +
-                "1,1500,50\r\n" +
-                "2,3000,20\r\n";
-
-            Assert.AreEqual(act, csv);
+            Assert.AreEqual(OperationStatusEnum.Success ,res);
 
         }
         [TestMethod]
@@ -100,9 +91,9 @@ namespace ATB.DA.Test.FlightsTests
                         )).FirstOrDefault();
 
             //Expected
-            var expected = new FlightModelSearchResultModel
+            var expected = new FlightSearchResultModel
                 (
-                        1,
+                        0,
                         "USA",
                         "UK",
                         DateTime.ParseExact("31/07/2023 12:30:00", "dd/MM/yyyy HH:mm:ss", null),

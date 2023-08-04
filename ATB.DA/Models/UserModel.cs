@@ -1,4 +1,4 @@
-﻿using ATB.DA.Enums;
+using ATB.DA.Enums;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
@@ -23,7 +23,6 @@ namespace ATB.DA.Models
         public static UserModel FromCSV(string CSVData)
         {
             string[] fields = CSVData.Split(",");
-            Console.WriteLine(CSVData);
             return new UserModel(
                 ulong.Parse(fields[0]),
                 fields[1],

@@ -14,6 +14,7 @@ namespace ATB.DA.Repositories.Flights
     {
         private const string _filePath = @"C:\Users\USER-M\source\repos\ATB\ATB.DA\Data\flights.csv";
         private List<FlightModel> _flights ;
+        private ulong _idSeq;
         public FileFlightRepository()
         {
             _flights = GetAllFlightsInFlightsFile();
@@ -47,7 +48,6 @@ namespace ATB.DA.Repositories.Flights
                                             .Aggregate( (new StringBuilder()), 
                                                     (builder, classLine) => builder.AppendLine(classLine)).ToString();
 
-                Console.WriteLine(flightClassesDetails);
                 flights.Add(FlightModel.FromCSV(flightDetails + flightClassesDetails));
 
                 //jump to the next flight.
@@ -76,7 +76,9 @@ namespace ATB.DA.Repositories.Flights
             return OperationStatusEnum.Success;
         }
 
-        
+        private ulong nextSeqNumFlightId()
+            => (ulong)_flights.Count;
+
         /// <summary>
         /// Add the provided flight to the system.
         /// </summary>
@@ -86,7 +88,10 @@ namespace ATB.DA.Repositories.Flights
         {
             try
             {
+                flight.FlightId = nextSeqNumFlightId(); 
+               
                 string csvFormat = flight.ToCSV();
+               
                 File.AppendAllText( _filePath, csvFormat);
             }catch (Exception ex)
             {
@@ -109,10 +114,10 @@ namespace ATB.DA.Repositories.Flights
         /// </summary>
         /// <param name="filter"></param>
         /// <returns></returns>
-        public List<FlightModelSearchResultModel> GetAllFlights(FlightFilter filter)
+        public List<FlightSearchResultModel> GetAllFlights(FlightFilter filter)
         {
            //Filter Function used in where statement.
-            Func<FlightModelSearchResultModel, bool> predicate = (flight) =>
+            Func<FlightSearchResultModel, bool> predicate = (flight) =>
             {
                 bool depCountryCondition = filter.DepCountry == null || filter.DepCountry == flight.DepCountry;
                 bool arrivalCountryCondition = filter.ArrivalCountry == null || filter.ArrivalCountry == flight.ArrivalCountry;
@@ -134,7 +139,7 @@ namespace ATB.DA.Repositories.Flights
 
             //flatten the flights becuase the single flight might have multiple classes.
             var res = _flights.SelectMany((flight) => flight.FlightClasses,
-                                (flight, flightClass) => new FlightModelSearchResultModel
+                                (flight, flightClass) => new FlightSearchResultModel
                                 (
                                     flight.FlightId,
                                     flight.DepCountry,

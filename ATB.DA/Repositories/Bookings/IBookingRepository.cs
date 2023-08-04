@@ -15,5 +15,7 @@ namespace ATB.DA.Repositories.Bookings
         public List<BookingModel> GetAllBookings(ulong UserId);
         public OperationStatusEnum UpdateBookingFlightClass(BookingModel from, FlightClassEnum to);
 
+        public OperationStatusEnum DeleteBooking(BookingModel booking);
+
     }
 }

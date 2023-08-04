@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ATB.DA.Models
 {
-    public record FlightModelSearchResultModel
+    public record FlightSearchResultModel
         (
             ulong FlightId,
             string DepCountry,

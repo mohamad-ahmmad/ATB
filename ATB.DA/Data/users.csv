@@ -1,5 +1,6 @@
-1,John,Doe,Smith,john.doe@example.com,password123,Manager
-2,Jane,,Johnson,jane.johnson@example.com,pass123,Passenger
-3,Mike,R.,Williams,mike.williams@example.com,securepwd!,Passenger
-4,Sarah,K.,Brown,sarah.brown@example.com,password456,Passenger
-5,Robert,,Lee,robert.lee@example.com,ilovegpt3,Passenger
+1,John,Doe,Smith,john.doe@example.com,password123,1
+2,Jane,,Johnson,jane.johnson@example.com,pass123,0
+3,Mike,R.,Williams,mike.williams@example.com,securepwd!,0
+4,Sarah,K.,Brown,sarah.brown@example.com,password456,0
+5,Robert,,Lee,robert.lee@example.com,ilovegpt3,0
+5,d,d,d,d@d.com,d,0

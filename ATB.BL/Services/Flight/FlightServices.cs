@@ -69,9 +69,8 @@ namespace ATB.BL.Services.Flight
         }
 
         public List<FlightSearchResultModel> GetFlightsUsingFilter(FlightFilter filter)
-        {
-            throw new NotImplementedException();
-        }
+            => _flightRepository.GetAllFlights(filter);
+
 
         public string GetValidationModel()
         {

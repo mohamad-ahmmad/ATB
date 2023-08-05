@@ -60,6 +60,42 @@ namespace ATB.DA.Repositories.Bookings
             }
             
         }
+
+        /// <summary>
+        /// Return the reference of the given booking inside the books.
+        /// </summary>
+        /// <param name="booking"></param>
+        /// <returns>Booking object if successfully found, else null</returns>
+        public BookingModel? Search(BookingModel booking)
+            => _books.Find((book)=> book.EqualsTo(booking));
+
+        /// <summary>
+        /// Gives csv string format for the current bookings
+        /// </summary>
+        /// <returns></returns>
+        private string AllBookingsCSVFormat()
+        => _books.Aggregate(
+                                new StringBuilder(),
+                                (builder, book) => builder.Append(book.ToCSV() + "\r\n")
+                           ).ToString();
+
+
+        /// <summary>
+        /// Delete a booking.
+        /// </summary>
+        /// <param name="booking"></param>
+        /// <returns>true if item successfully removed, false then the item doesn't exists.</returns>
+        public OperationStatusEnum DeleteBooking(BookingModel booking)
+        {
+            OperationStatusEnum res =
+               _books.Remove(Search(booking)!) ? OperationStatusEnum.Success : OperationStatusEnum.Failed;
+
+            if(res == OperationStatusEnum.Success)
+                File.WriteAllText(_filePath, AllBookingsCSVFormat());
+            
+            return res;
+        }
+
         /// <summary>
         /// Get all the books in the storage
         /// </summary>
@@ -83,22 +119,22 @@ namespace ATB.DA.Repositories.Bookings
         /// <returns>OperationStatusEnum</returns>
         public OperationStatusEnum UpdateBookingFlightClass(BookingModel from, FlightClassEnum to)
         {
-                FlightClassEnum olderValue = from.FlightClass;
-                from.FlightClass = to;
+            BookingModel? toChange = Search(from);
+            if (toChange is null)
+                return OperationStatusEnum.Failed;
 
-                //build csv format for the bookings
-                string booksCSVFormat = _books.Aggregate
-                            (
-                                new StringBuilder(),
-                                (builder, book) => builder.Append(book.ToCSV()+"\r\n")
-                            ).ToString();
+            FlightClassEnum olderValue =  from.FlightClass;
+            toChange.FlightClass = to;
 
-                try
+            //build csv format for the bookings
+            string booksCSVFormat = AllBookingsCSVFormat();
+
+            try
                 {
                 File.WriteAllText(_filePath, booksCSVFormat);
                 return OperationStatusEnum.Success;
                 }
-                catch(Exception ex)
+            catch(Exception ex)
                 {
                     Console.WriteLine("Error : " + ex.ToString());
                     from.FlightClass=olderValue;

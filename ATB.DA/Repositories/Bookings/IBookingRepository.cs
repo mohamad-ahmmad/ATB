@@ -16,6 +16,7 @@ namespace ATB.DA.Repositories.Bookings
         public OperationStatusEnum UpdateBookingFlightClass(BookingModel from, FlightClassEnum to);
 
         public OperationStatusEnum DeleteBooking(BookingModel booking);
+        public BookingModel? Search(BookingModel booking);
 
     }
 }

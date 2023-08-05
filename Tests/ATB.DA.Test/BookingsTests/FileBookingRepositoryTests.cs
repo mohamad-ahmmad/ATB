@@ -17,11 +17,11 @@ namespace ATB.DA.Test.BookingsTests
         private List<BookingModel> GetMockOfBookingData() 
             => new List<BookingModel>
         {
-            new BookingModel(1, 101, FlightClassEnum.Economy),
-            new BookingModel(2, 202, FlightClassEnum.Business),
-            new BookingModel(3, 303, FlightClassEnum.FirstClass),
-            new BookingModel(4, 404, FlightClassEnum.Economy),
-            new BookingModel(5, 505, FlightClassEnum.Business)
+            new BookingModel(1, 1, FlightClassEnum.Economy),
+            new BookingModel(2, 1, FlightClassEnum.Business),
+            new BookingModel(1, 0, FlightClassEnum.FirstClass),
+            new BookingModel(4, 2, FlightClassEnum.Economy),
+            new BookingModel(5, 2, FlightClassEnum.Business)
         };
 
         //[TestInitialize]
@@ -35,7 +35,7 @@ namespace ATB.DA.Test.BookingsTests
             ClearFileContent();
             // Arrange
             FileBookingRepository bookingRepo = new();
-            BookingModel booking = new BookingModel(1, 101, FlightClassEnum.Economy);
+            BookingModel booking = new BookingModel(1, 1, FlightClassEnum.Economy);
 
             // Act
             OperationStatusEnum status = bookingRepo.AddBooking(booking);
@@ -46,7 +46,7 @@ namespace ATB.DA.Test.BookingsTests
             //Check the content of the file
 
             string? lineActual = File.ReadAllLines(_filePath).FirstOrDefault();
-            string expected = "1,101,0";
+            string expected = "1,1,0";
 
             Assert.AreEqual(expected, lineActual);
         }
@@ -86,6 +86,22 @@ namespace ATB.DA.Test.BookingsTests
             OperationStatusEnum expected = OperationStatusEnum.Success;
 
             Assert.AreEqual(expected, act);
+        }
+
+
+        //This test depends on the upper tests
+        [TestMethod]
+        public void DeleteBooking_DeleteTheBookingSuccessfully()
+        {
+            //This test add the bookings to the bookings.csv.
+            UpdateBookingFlightClass_UpdateTheBookingsSuccessfully();
+            FileBookingRepository repository = new();
+
+            var books = repository.GetAllBookings();
+
+            repository.DeleteBooking(books[3]);
+
+            Assert.IsTrue(books.Count == 4);
         }
 
         //[TestCleanup]

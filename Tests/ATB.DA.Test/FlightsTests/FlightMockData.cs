@@ -15,7 +15,7 @@ namespace ATB.DA.Test.FlightsTests
              new List<FlightModel>
         {
         new FlightModel(
-            flightId: 1,
+            flightId: 0,
             depCountry: "USA",
             arrivalCountry: "UK",
             depDate: new DateTime(2023, 7, 31, 12, 30, 0),
@@ -30,7 +30,7 @@ namespace ATB.DA.Test.FlightsTests
             dateFormat: "dd/MM/yyyy HH:mm:ss"
         ),
         new FlightModel(
-            flightId: 2,
+            flightId: 1,
             depCountry: "UK",
             arrivalCountry: "France",
             depDate: new DateTime(2023, 8, 15, 8, 0, 0),
@@ -45,7 +45,7 @@ namespace ATB.DA.Test.FlightsTests
             null
         ),
         new FlightModel(
-            flightId: 3,
+            flightId: 2,
             depCountry: "Germany",
             arrivalCountry: "Spain",
             depDate: new DateTime(2023, 9, 20, 15, 45, 0),

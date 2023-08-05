@@ -2,6 +2,7 @@
 using ATB.DA.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -56,7 +57,7 @@ namespace ATB.DA.Test.FlightsTests
             string result = flightModel.ToCSV();
 
             // Assert
-            string expectedCSV = "2,UK,France,2023-08-15 08:00:00,LHR,CDG,default,3\r\n" +
+            string expectedCSV = "1,UK,France,2023-08-15 08:00:00,LHR,CDG,default,3\r\n" +
                 "0,400,250\r\n" +
                 "1,1200,40\r\n" +
                 "2,2500,15\r\n";

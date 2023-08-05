@@ -15,16 +15,16 @@ namespace ATB.BL.Services.Authentication
         public AuthenticationServices(IUserRepository userRepo) => _userRepository = userRepo;
 
 
-        public bool AuthenticateUserByEmail(string email, string password)
+        public bool AuthenticateUserByEmail(string email, string password, out UserModel? user)
         {
-            UserModel? user = _userRepository.GetUser(email);
+            user = _userRepository.GetUser(email);
             return user is not null && user.Password == password;
         }
 
 
-        public bool AuthenticateUserById(ulong id, string password)
+        public bool AuthenticateUserById(ulong id, string password, out UserModel? user)
         {
-            UserModel? user =_userRepository.GetUser(id);
+            user =_userRepository.GetUser(id);
             return user is not null &&
                 user.Password == password;
         }

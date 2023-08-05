@@ -49,6 +49,8 @@ namespace ATB.DA.Repositories
         /// <returns></returns
         public OperationStatusEnum AddUser(UserModel user)
         {
+            //Assign unique Id to the user.
+            user = user with { UserId = (ulong)_users.Count };
             if(AddUserToFile(user.ToCSV()) == OperationStatusEnum.Failed)
                 return OperationStatusEnum.Failed;
             

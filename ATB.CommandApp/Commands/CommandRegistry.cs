@@ -40,6 +40,10 @@ namespace ATB.CommandApp.Commands
             map.Add(new Tuple<string, State>("2", State.LoginOrRegister), new RegisterCommand(_userServices));
             map.Add(new Tuple<string, State>("exit", State.LoginOrRegister), new ExitCommand());
 
+            map.Add(new Tuple<string, State> ("1", State.Manager), new AddFlightsFromFileCommand(_flightServices));
+            map.Add(new Tuple<string, State> ("2", State.Manager), new FilterSearchCommand(_flightServices, _bookingServices));
+            map.Add(new Tuple<string, State> ("3", State.Manager), new GetModelValidationCommand(_flightServices));
+            map.Add(new Tuple<string, State> ("4", State.Manager), logoutCommand);
             return map;
         }
         private Dictionary<Tuple<string, State>, ICommand>? _commands = null;

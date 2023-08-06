@@ -24,5 +24,11 @@ namespace ATB.DA.Models
 
             return new FlightClassModel(flightClass, price, capacity);
         }
-    };
+
+        public override string ToString()
+            => $"Flight class : {FlightClass}\r\n" +
+                $"Price : {Price}\r\n" +
+                $"Capacity : {Capacity}\r\n"; 
+
+    }
 }

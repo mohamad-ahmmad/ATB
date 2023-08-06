@@ -2,6 +2,8 @@
 using ATB.DA.Models.ValidationAttributes;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.Metrics;
+using System.Reflection;
+using System.Text;
 
 namespace ATB.DA.Models
 {
@@ -175,7 +177,58 @@ namespace ATB.DA.Models
 
         }
 
+        public static List<string> GetFlightModelFieldDetails()
+        {
+            List<string> fieldDetails = new List<string>();
+            Type flightModelType = typeof(FlightModel);
+            PropertyInfo[] properties = flightModelType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
-    };
+            foreach (var property in properties)
+            {
+                string fieldName = property.Name;
 
+                // Get the data type of the property
+                string dataType = property.PropertyType.Name;
+
+                // Get the required and regular expression attributes
+                var requiredAttribute = property.GetCustomAttribute<RequiredAttribute>();
+                string required = requiredAttribute != null ? "Required" : "Not Required";
+
+                var regexAttribute = property.GetCustomAttribute<RegularExpressionAttribute>();
+                string regex = regexAttribute != null ? $"Allowed Format: {regexAttribute.Pattern}" : "Free Text";
+
+                // Get custom validation attributes (e.g., ValidDateAttribute)
+                var customAttributes = property.GetCustomAttributes<ValidationAttribute>();
+                foreach (var attribute in customAttributes)
+                {
+                    if (attribute is ValidDateAttribute validDateAttribute)
+                    {
+                        regex += "\nAllowed Range: Today -> Future";
+                    }
+                    // Add more custom attribute checks here if needed
+                }
+
+                string fieldDetail = $"- {fieldName}:\n  - {dataType}\n  - {required}\n  - {regex}";
+                fieldDetails.Add(fieldDetail);
+            }
+
+            return fieldDetails;
+        }
+
+        public override string ToString()
+        {
+            string flightClasses 
+                = this.FlightClasses.Aggregate(new StringBuilder("{\r\n"), (builder, flightClass) => builder.Append(flightClass.ToString())).Append("}\r\n").ToString();
+
+            return $"Flight id : {FlightId}\r\n" +
+                    $"Departure country : {DepCountry}\r\n" +
+                    $"Arrival country : {ArrivalCountry}\r\n" +
+                    $"Departure date : {DepDate}\r\n" +
+                    $"Departure airport : {DepAirport}\r\n" +
+                    $"Arrival Airport : {ArrivalAirport}\r\n" +
+                    $"Classes : {flightClasses}"; 
+        }
+
+
+    }
 }

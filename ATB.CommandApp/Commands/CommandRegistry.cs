@@ -1,14 +1,11 @@
-﻿using ATB.BL.Services.Authentication;
+using ATB.BL.Services.Authentication;
 using ATB.BL.Services.Booking;
 using ATB.BL.Services.Flight;
 using ATB.BL.Services.User;
 using ATB.CommandApp.Commands.Entry;
 using ATB.CommandApp.Commands.Global;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ATB.CommandApp.Commands.Manager;
+using ATB.CommandApp.Commands.User;
 
 namespace ATB.CommandApp.Commands
 {
@@ -18,14 +15,24 @@ namespace ATB.CommandApp.Commands
         private readonly IUserServices _userServices;
         private readonly IFlightServices _flightServices;
         private readonly IBookingServices _bookingServices;
-        public CommandRegistry(IAuthenticationServices authSerivces, IUserServices userServices, IFlightServices flightServices, IBookingServices bookingServices)
+
+        private static CommandRegistry? instance = null;
+
+        private CommandRegistry(IAuthenticationServices authSerivces, IUserServices userServices, IFlightServices flightServices, IBookingServices bookingServices)
             => (_authSerivces, _userServices, _flightServices, _bookingServices) = (authSerivces, userServices, flightServices, bookingServices);
+
+
+        public static CommandRegistry GetInstance()
+        {
+            instance ??= new CommandRegistry(App.Auth, App.UserServices, App.FlightServices, App.BookingServices);
+            return instance;
+        }
 
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        private Dictionary<Tuple<string, State>, ICommand> Commands()
+        private Dictionary<Tuple<string, State>, ICommand> GetCommands()
         {
             var map = new Dictionary<Tuple<string, State>, ICommand>();
             
@@ -44,7 +51,7 @@ namespace ATB.CommandApp.Commands
         /// <returns></returns>
         public ICommand GetCommand(string commandName)
         {
-            _commands ??= Commands();
+            _commands ??= GetCommands();
 
             bool res = _commands.TryGetValue(new Tuple<string,State>(commandName, AppState.CurrentState), out ICommand? command);
 

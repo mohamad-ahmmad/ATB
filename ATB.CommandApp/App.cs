@@ -1,4 +1,4 @@
-using ATB.BL.Services.Authentication;
+﻿using ATB.BL.Services.Authentication;
 using ATB.BL.Services.Booking;
 using ATB.BL.Services.Flight;
 using ATB.BL.Services.User;
@@ -22,7 +22,7 @@ namespace ATB.CommandApp
 
         public void Launch()
         {
-            CommandRegistry registry = new(Auth, UserServices, FlightServices, BookingServices);
+            CommandRegistry registry = CommandRegistry.GetInstance();
             EntryCommander commander = new(registry);
             commander.Start();
         }

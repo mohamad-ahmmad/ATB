@@ -43,7 +43,7 @@ namespace ATB.BL.Services.Flight
                                             .Aggregate((new StringBuilder()),
                                                     (builder, classLine) => builder.AppendLine(classLine)).ToString();
 
-                FlightModel flight = FlightModel.FromCSV(lines[i] + flightClassesDetails);
+                FlightModel flight = FlightModel.FromCSV(lines[i]+ "\r\n" + flightClassesDetails);
 
                 List<ValidationResult> errors = new();
                 ValidationContext context = new(flight);
@@ -57,7 +57,7 @@ namespace ATB.BL.Services.Flight
                         error => errorMessages.Add($"Error in {flight.FlightId}ID Flight.\r\nMessage : {error.ErrorMessage}"));
                 }
                 
-
+                flights.Add(flight);
                 //jump to the next flight.
                 i += flightClassesCount + 1;
             }
@@ -71,6 +71,8 @@ namespace ATB.BL.Services.Flight
         public List<FlightSearchResultModel> GetFlightsUsingFilter(FlightFilter filter)
             => _flightRepository.GetAllFlights(filter);
 
+        public  List<FlightSearchResultModel> GetFlightsUsingFilter(List<FlightModel> flights, FlightFilter filter)
+            => _flightRepository.GetAllFlights(flights,filter);
 
         public string GetValidationModel()
         {

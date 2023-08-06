@@ -13,5 +13,6 @@ namespace ATB.BL.Services.Flight
         public List<string>? AddFlights(string fileContent);
         public string GetValidationModel();
         public List<FlightSearchResultModel> GetFlightsUsingFilter(FlightFilter filter);
+        public List<FlightSearchResultModel> GetFlightsUsingFilter(List<FlightModel> flights ,FlightFilter filter);
     }
 }

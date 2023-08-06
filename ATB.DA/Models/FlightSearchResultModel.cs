@@ -15,5 +15,17 @@ namespace ATB.DA.Models
             string DepAirport,
             string ArrivalAirport,
             FlightClassModel FlightClassModel
-        );
+        )
+    {
+        public override string ToString()
+        =>
+             $"Flight id : {FlightId}\r\n" +
+                    $"Departure country : {DepCountry}\r\n" +
+                    $"Arrival country : {ArrivalCountry}\r\n" +
+                    $"Departure date : {DepDate}\r\n" +
+                    $"Departure airport : {DepAirport}\r\n" +
+                    $"Arrival Airport : {ArrivalAirport}\r\n" +
+                    $"{FlightClassModel}\r\n";
+        
+    }
 }

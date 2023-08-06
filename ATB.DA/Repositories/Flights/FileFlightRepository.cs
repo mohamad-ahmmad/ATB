@@ -108,15 +108,9 @@ namespace ATB.DA.Repositories.Flights
         /// <returns></returns>
         public List<FlightModel> GetAllFlights()=> _flights;
 
-
-        /// <summary>
-        /// Return a result list of FlightModel the matches with the filter data.
-        /// </summary>
-        /// <param name="filter"></param>
-        /// <returns></returns>
-        public List<FlightSearchResultModel> GetAllFlights(FlightFilter filter)
+        public List<FlightSearchResultModel> GetAllFlights(List<FlightModel> flights, FlightFilter filter)
         {
-           //Filter Function used in where statement.
+            //Filter Function used in where statement.
             Func<FlightSearchResultModel, bool> predicate = (flight) =>
             {
                 bool depCountryCondition = filter.DepCountry == null || filter.DepCountry == flight.DepCountry;
@@ -138,7 +132,7 @@ namespace ATB.DA.Repositories.Flights
             };
 
             //flatten the flights becuase the single flight might have multiple classes.
-            var res = _flights.SelectMany((flight) => flight.FlightClasses,
+            var res = flights.SelectMany((flight) => flight.FlightClasses,
                                 (flight, flightClass) => new FlightSearchResultModel
                                 (
                                     flight.FlightId,
@@ -149,9 +143,17 @@ namespace ATB.DA.Repositories.Flights
                                     flight.ArrivalAirport,
                                     flightClass
                                 ));
-            
+
             return res.Where(predicate).ToList();
         }
+
+        /// <summary>
+        /// Return a result list of FlightModel the matches with the filter data.
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        public List<FlightSearchResultModel> GetAllFlights(FlightFilter filter)
+            => GetAllFlights(_flights, filter);
 
     }
 }

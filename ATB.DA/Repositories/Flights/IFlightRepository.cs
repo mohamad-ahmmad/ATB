@@ -15,5 +15,6 @@ namespace ATB.DA.Repositories.Flights
         public OperationStatusEnum AddAllFlights(List<FlightModel> flights);
         public List<FlightModel> GetAllFlights();
         public List<FlightSearchResultModel> GetAllFlights(FlightFilter filter);
+        public List<FlightSearchResultModel> GetAllFlights(List<FlightModel> flights, FlightFilter filter);
     }
 }

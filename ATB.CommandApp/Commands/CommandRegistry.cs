@@ -1,4 +1,4 @@
-using ATB.BL.Services.Authentication;
+﻿using ATB.BL.Services.Authentication;
 using ATB.BL.Services.Booking;
 using ATB.BL.Services.Flight;
 using ATB.BL.Services.User;
@@ -35,7 +35,9 @@ namespace ATB.CommandApp.Commands
         private Dictionary<Tuple<string, State>, ICommand> GetCommands()
         {
             var map = new Dictionary<Tuple<string, State>, ICommand>();
-            
+
+            ICommand logoutCommand = new LogoutCommand();
+
             map.Add(new Tuple<string, State>("1", State.LoginOrRegister), new LoginCommand(_authSerivces));
             map.Add(new Tuple<string, State>("2", State.LoginOrRegister), new RegisterCommand(_userServices));
             map.Add(new Tuple<string, State>("exit", State.LoginOrRegister), new ExitCommand());
@@ -44,6 +46,13 @@ namespace ATB.CommandApp.Commands
             map.Add(new Tuple<string, State> ("2", State.Manager), new FilterSearchCommand(_flightServices, _bookingServices));
             map.Add(new Tuple<string, State> ("3", State.Manager), new GetModelValidationCommand(_flightServices));
             map.Add(new Tuple<string, State> ("4", State.Manager), logoutCommand);
+
+            map.Add(new Tuple<string, State>("1", State.User), new ViewAllBookingsCommand(_bookingServices));
+            map.Add(new Tuple<string, State>("2", State.User), new BookFlightCommand(_flightServices, _bookingServices));
+            map.Add(new Tuple<string, State>("3", State.User), new SearchForFlightsCommand(_flightServices));
+            map.Add(new Tuple<string, State>("5", State.User), new CancelBookingCommand(_bookingServices));
+            map.Add(new Tuple<string, State>("6", State.User), logoutCommand);
+
             return map;
         }
         private Dictionary<Tuple<string, State>, ICommand>? _commands = null;

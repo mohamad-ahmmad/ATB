@@ -15,7 +15,7 @@ namespace ATB.CommandApp
     }
     public class AppState
     {
-        public static ulong UserId;
+        public static ulong? UserId = null;
         public static State CurrentState = State.LoginOrRegister; 
     }
 }

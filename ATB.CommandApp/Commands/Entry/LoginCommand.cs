@@ -29,20 +29,19 @@ namespace ATB.CommandApp.Commands.Entry
         }
         public void Execute()
         {
-            string email;
-            string password;
-            
-          
-                GetLoginData(out email, out password);
-                UserModel? user;
+
+
+            GetLoginData(out string email, out string password);
+            UserModel? user;
                 bool res = _authService.AuthenticateUserByEmail(email, password, out user);
 
                 if (res)
                 {
                     Console.WriteLine(ConsoleUtilites.Divider);
                     Console.WriteLine("Login Successful.");
-
+                    
                     ICommander nextCommander;
+                    AppState.UserId = user!.UserId;
                     AppState.CurrentState = user!.AccessLevel == DA.Enums.AccessLevelEnum.Manager ? State.Manager : State.User;
 
 
@@ -50,8 +49,8 @@ namespace ATB.CommandApp.Commands.Entry
                         nextCommander = new ManagerCommander();
                     else
                         nextCommander = new UserCommander();
-
-                    nextCommander.Start();
+                Console.WriteLine(AppState.CurrentState);
+                nextCommander.Start();
                 }
                 else
                     Console.WriteLine("Check your email or username.");

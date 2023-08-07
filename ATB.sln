@@ -15,7 +15,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ATB.BL", "ATB.BL\ATB.BL.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ATB.BL.Test", "Tests\ATB.BL.Test\ATB.BL.Test.csproj", "{8D0C39B4-C368-4B5A-8DD1-9F5582596F98}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ATB.CommandApp", "ATB.CommandApp\ATB.CommandApp.csproj", "{2D3BB056-0FE8-4893-89EE-4681794FF4F1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ATB.CommandApp", "ATB.CommandApp\ATB.CommandApp.csproj", "{2D3BB056-0FE8-4893-89EE-4681794FF4F1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E81911C0-C6A8-48B8-B3DF-88B2C7C6AA4A}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
